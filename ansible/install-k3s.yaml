@@ -1,0 +1,65 @@
+# Taken from https://github.com/docker/docker-install
+- name: Install docker
+  shell: curl -sfL https://get.docker.com | sh -
+  become: true
+
+- name: Add current user to docker group
+  user:
+    name: "{{ ansible_user }}"
+    groups: docker
+    append: true
+  become: true
+
+- name: Restart docker service
+  systemd_service:
+    state: restarted
+    daemon_reload: true
+    name: docker
+  become: true
+
+# Taken from https://docs.k3s.io/quick-start
+- name: Install k3s
+  shell: curl -sfL https://get.k3s.io | sh -
+  become: true
+
+- name: Ensure .kube dir exists
+  file:
+    path: "{{ ansible_user_dir }}/.kube"
+    state: directory
+
+- name: Copy file to home dir
+  copy:
+    dest: "{{ ansible_user_dir }}/.kube/config"
+    src: /etc/rancher/k3s/k3s.yaml
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    remote_src: true
+  become: true
+
+- name: Install helm
+  community.general.snap:
+    name: helm
+    classic: true
+  become: true
+
+- name: Download cert-manager manifests
+  get_url:
+    url: "https://github.com/cert-manager/cert-manager/releases/download/v1.17.2/cert-manager.yaml"
+    dest: "{{ ansible_user_dir }}/cert_manager_install.yaml"
+    mode: "0755"
+
+- name: Apply cert manager manifest to the cluster
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ ansible_user_dir }}/cert_manager_install.yaml"
+
+- name: Wait 15 seconds for cert manager to start
+  pause:
+    seconds: 15
+
+- name: Create fact file
+  copy:
+    dest: /etc/ansible/facts.d/install_k3s.fact
+    mode: 0644
+    content: |
+      {}

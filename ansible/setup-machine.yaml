@@ -1,0 +1,51 @@
+- name: Ensure apt cache is up to date
+  apt:
+    upgrade: true
+    update_cache: true
+  become: true
+
+- name: Install nmap package # Debug open ports with ($ nmap localhost)
+  apt:
+    name: nmap
+  become: true
+
+- name: Install netstat package # Debug processes using ports with ($ sudo netstat -peanut)
+  apt:
+    name: net-tools
+  become: true
+
+- name: Install dnsutils package # Debug which dns servers are used
+  apt:
+    name: dnsutils
+  become: true
+
+- name: Install snap # Note: Needs a reboot before `/snap/bin` appears on the $PATH
+  apt:
+    name: snapd
+  become: true
+
+- name: Install pip
+  apt:
+    name: python3-pip
+  become: true
+
+- name: Install kubernetes python library
+  apt:
+    name: python3-kubernetes
+  become: true
+
+- name: Create directory for local ansible fact cache
+  file:
+    path: /etc/ansible/facts.d
+    state: directory
+    recurse: true
+    owner: "{{ ansible_user_uid }}"
+    group: "{{ ansible_user_gid }}"
+  become: true
+
+- name: Create fact file
+  copy:
+    dest: /etc/ansible/facts.d/setup_machine.fact
+    mode: 0644
+    content: |
+      {}

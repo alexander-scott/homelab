@@ -1,0 +1,26 @@
+- hosts: node
+  vars:
+    default_hostname: "{{ ansible_host | replace('.', '-') }}.nip.io"
+  tasks:
+    - name: Check to see if host is alive
+      ping:
+
+    - name: Run setup-machine.yaml tasks
+      include_tasks: setup-machine.yaml
+      when: not ansible_local.setup_machine is defined
+
+    - name: Run install-k3s.yaml tasks
+      include_tasks: install-k3s.yaml
+      when: not ansible_local.install_k3s is defined
+
+    - name: Run install-whoami.yaml tasks
+      include_tasks: install-whoami.yaml
+
+    - name: Run install-argocd.yaml tasks
+      include_tasks: install-argocd.yaml
+
+    - name: Run install-grafana.yaml tasks
+      include_tasks: install-grafana.yaml
+
+    # - name: Run install-pihole.yaml tasks
+    #   include_tasks: install-pihole.yaml
