@@ -1,6 +1,6 @@
 name: project
 description: A minimal AWS Python Pulumi program
-main: pulumi
+main: aws
 runtime:
   name: python
   options:
