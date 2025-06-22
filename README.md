@@ -4,35 +4,39 @@
 
 ### Pre-requisites
 
-First, ensure you have [UV](https://docs.astral.sh/uv/getting-started/installation/) on your local machine, then set up a venv and install the deps in the `requirements.txt` with:
+First, ensure you have [UV](https://docs.astral.sh/uv/getting-started/installation/) installed on your local machine. Then, set up a virtual environment and install the dependencies from `requirements.txt` with:
 
 ```bash
-$ uv venv
-$ source .venv/bin/activate
-$ uv sync
+uv venv
+source .venv/bin/activate
+uv sync
 ```
 
 You can also run the pre-commit linters with:
 
 ```bash
-$ uv tool run -- pre-commit run --all-files
+uv tool run -- pre-commit run --all-files
 ```
 
 ### SSH
 
-Ansible will be running tasks on the remote machine via ssh, therefore make sure you have created a key pair locally, and that your public key is present in the `~/.ssh/authorized_keys` file on the remote machine(s).
+Ansible will run tasks on the remote machine via SSH. Make sure you have created a key pair locally, and that your public key is present in the `~/.ssh/authorized_keys` file on the remote machine(s).
 
-You can create a new key-pair with `ssh-keygen -t rsa -m PEM`.
+You can create a new key pair with:
 
-### The homelab machine
+```bash
+ssh-keygen -t rsa -m PEM
+```
+
+### The Homelab Machine
 
 #### On-prem
 
-If you want to run your homelab on-prem on a Raspberry PI, then all you need to do is make sure it is accessible on your local network and add your public key to its `~/.ssh/authorized_keys` file.
+If you want to run your homelab on-premises on a Raspberry Pi, ensure it is accessible on your local network and add your public key to its `~/.ssh/authorized_keys` file.
 
 #### AWS
 
-If you want to run the homelab on a disposable VM in the cloud, we now need to create that. First, ensure your AWS account exists and you have full access there. Secondly, ensure that your local set up is correct with the AWS config file pointing to your account and the correct role, and that the credentials are refreshed. You can check this with:
+If you want to run the homelab on a disposable VM in the cloud, you need to create that. First, ensure your AWS account exists and you have full access. Next, make sure your local setup is correct, with the AWS config file pointing to your account and the correct role, and that your credentials are refreshed. You can check this with:
 
 ```bash
 $ cat ~/.aws/credentials
@@ -59,15 +63,15 @@ $ aws sts get-caller-identity
 }
 ```
 
-Then, set your Pulumi cache to be within the current dir:
+Then, set your Pulumi cache to be within the current directory:
 
 ```bash
-$ pulumi login file://.pulumi
+pulumi login file://.pulumi
 ```
 
-Finally, copy the `aws/private_constants.py.example` file and rename it to `private_constants.py`, and then provide your public key and the AWS VPC and subnet ID that you want the VM to be created in.
+Finally, copy the `aws/private_constants.py.example` file, rename it to `private_constants.py`, and provide your public key, AWS VPC, and subnet ID for the VM.
 
-To check everything is working you can run:
+To check everything is working, run:
 
 ```bash
 $ export AWS_PROFILE=123456789_UserFull
