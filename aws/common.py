@@ -6,7 +6,7 @@ from .constants import VPC_ID, SUBNET_ID, PUBLIC_KEYPAIR, AMI_ID
 
 def spin_up_ec2_instance(
     instance_type: str, resource_prefix: str, ami_id: AMI_ID
-) -> ec2.AwaitableGetAmiResult:
+) -> None:
     ami = ec2.get_ami(
         most_recent=True,
         owners=["amazon"],
