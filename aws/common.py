@@ -1,7 +1,7 @@
 import pulumi
 from pulumi_aws import ec2
 
-from .constants import VPC_ID, SUBNET_ID, PUBLIC_KEYPAIR, AMI_ID
+from constants import VPC_ID, SUBNET_ID, PUBLIC_KEYPAIR, AMI_ID
 
 
 def spin_up_ec2_instance(
