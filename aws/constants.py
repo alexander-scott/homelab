@@ -1,7 +1,7 @@
 from enum import Enum
 
 try:
-    from .private_constants import _VPC_ID, _SUBNET_ID, _PUBLIC_KEYPAIR
+    from private_constants import _VPC_ID, _SUBNET_ID, _PUBLIC_KEYPAIR
 
     VPC_ID = _VPC_ID
     SUBNET_ID = _SUBNET_ID
