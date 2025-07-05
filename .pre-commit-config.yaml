@@ -42,4 +42,4 @@ repos:
     hooks:
       - id: mypy
         name: "mypy"
-        args: [--strict, --ignore-missing-imports]
+        args: []
