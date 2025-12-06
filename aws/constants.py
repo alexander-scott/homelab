@@ -1,7 +1,7 @@
 from enum import Enum
 
 try:
-    from private_constants import _VPC_ID, _SUBNET_ID, _PUBLIC_KEYPAIR
+    from private_constants import _PUBLIC_KEYPAIR, _SUBNET_ID, _VPC_ID
 
     VPC_ID = _VPC_ID
     SUBNET_ID = _SUBNET_ID
@@ -12,7 +12,7 @@ except ImportError:
     PUBLIC_KEYPAIR = ""
 
 
-class AMI_ID(str, Enum):
+class AMI_ID(str, Enum):  # noqa: N801
     UBUNTU_SERVER_2404 = "ami-0fd8fe5cdf7cad6f6"  # Ubuntu Server 24.04 LTS (HVM) (ARM)
     WINDOWS_SERVER_2025 = (
         "ami-02875f678fa0d1eb2"  # Microsoft Windows Server 2025 Full Locale English
