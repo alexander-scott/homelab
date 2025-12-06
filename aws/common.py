@@ -1,7 +1,7 @@
 import pulumi
+from constants import AMI_ID, PUBLIC_KEYPAIR, SUBNET_ID, VPC_ID
 from pulumi_aws import ec2
-
-from constants import VPC_ID, SUBNET_ID, PUBLIC_KEYPAIR, AMI_ID
+from pulumi_command import local
 
 
 def spin_up_ec2_instance(
@@ -87,3 +87,11 @@ def spin_up_ec2_instance(
     lb = ec2.Eip(f"{resource_prefix}-eip", instance=instance.id, domain="vpc")
 
     pulumi.export(f"{resource_prefix}-publicIp", lb.public_ip)
+
+    local.Command(
+        "renderInventoryCmd",
+        create="cat ../ansible/inventory.yaml.example | envsubst > ../ansible/private_inventory.yaml",
+        environment={
+            "ANSIBLE_HOST": lb.public_ip,
+        },
+    )

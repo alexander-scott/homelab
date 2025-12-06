@@ -4,12 +4,11 @@
 
 ### Pre-requisites
 
-First, ensure you have [UV](https://docs.astral.sh/uv/getting-started/installation/) installed on your local machine. Then, set up a virtual environment and install the dependencies from `requirements.txt` with:
+First, ensure you have [UV](https://docs.astral.sh/uv/getting-started/installation/) installed on your local machine. Then, set up a virtual environment and install the dependencies from `pyproject.toml` file with:
 
 ```bash
-uv venv
-source .venv/bin/activate
 uv sync
+source .venv/bin/activate
 ```
 
 You can also run the pre-commit linters with:
@@ -28,13 +27,11 @@ You can create a new key pair with:
 ssh-keygen -t rsa -m PEM
 ```
 
-### The Homelab Machine
-
-#### On-prem
+### The On-prem Homelab Machine
 
 If you want to run your homelab on-premises on a Raspberry Pi, ensure it is accessible on your local network and add your public key to its `~/.ssh/authorized_keys` file.
 
-#### AWS
+### The AWS Homelab Machine
 
 If you want to run the homelab on a disposable VM in the cloud, you need to create that. First, ensure your AWS account exists and you have full access. Next, make sure your local setup is correct, with the AWS config file pointing to your account and the correct role, and that your credentials are refreshed. You can check this with:
 
@@ -66,6 +63,7 @@ $ aws sts get-caller-identity
 Then, set your Pulumi cache to be within the current directory:
 
 ```bash
+mkdir .pulumi
 pulumi login file://.pulumi
 ```
 
@@ -89,4 +87,22 @@ Outputs:
 
 Resources:
     + 5 to create
+```
+
+You can then create the resources with:
+
+```bash
+$ pulumi up
+```
+
+And destroy them when you're done with:
+
+```bash
+$ pulumi destroy
+```
+
+You can ssh into the machine with (note the IP outputted by Pulumi):
+
+```bash
+$ ssh -i ./ssh_keys/id_rsa ubuntu@{IP_ADDRESS}
 ```
