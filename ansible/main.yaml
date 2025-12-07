@@ -16,11 +16,11 @@
     - name: Run install-whoami.yaml tasks
       include_tasks: install-whoami.yaml
 
-    - name: Run install-argocd.yaml tasks
-      include_tasks: install-argocd.yaml
-
     - name: Run install-grafana.yaml tasks
       include_tasks: install-grafana.yaml
+
+    # - name: Run install-argocd.yaml tasks
+    #   include_tasks: install-argocd.yaml
 
     # - name: Run install-pihole.yaml tasks
     #   include_tasks: install-pihole.yaml
