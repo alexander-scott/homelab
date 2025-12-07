@@ -44,7 +44,7 @@
 
 - name: Print URL
   debug:
-    msg: "{{ hostname | default(default_hostname) }}/argocd"
+    msg: "https://{{ hostname | default(default_hostname) }}/argocd"
 
 - name: Print admin password
   debug:
