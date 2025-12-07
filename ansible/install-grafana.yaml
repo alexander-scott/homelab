@@ -59,4 +59,4 @@
 
 - name: Print URL
   debug:
-    msg: "{{ hostname | default(default_hostname) }}/grafana"
+    msg: "https://{{ hostname | default(default_hostname) }}/grafana"
