@@ -8,14 +8,14 @@
 - name: Copy whoami manifest
   template:
     src: "k8s_manifests/whoami.yaml.j2"
-    dest: "{{ ansible_user_dir }}/whoami_install.yaml"
+    dest: "{{ ansible_facts['user_dir'] }}/whoami_install.yaml"
     mode: "0644"
 
 - name: Apply whoami manifest to the cluster
   kubernetes.core.k8s:
     state: present
     namespace: whoami
-    src: "{{ ansible_user_dir }}/whoami_install.yaml"
+    src: "{{ ansible_facts['user_dir'] }}/whoami_install.yaml"
 
 - name: Print URL
   debug:

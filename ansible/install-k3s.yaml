@@ -24,12 +24,12 @@
 
 - name: Ensure .kube dir exists
   file:
-    path: "{{ ansible_user_dir }}/.kube"
+    path: "{{ ansible_facts['user_dir'] }}/.kube"
     state: directory
 
 - name: Copy file to home dir
   copy:
-    dest: "{{ ansible_user_dir }}/.kube/config"
+    dest: "{{ ansible_facts['user_dir'] }}/.kube/config"
     src: /etc/rancher/k3s/k3s.yaml
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
@@ -46,13 +46,13 @@
 - name: Download cert-manager manifests
   get_url:
     url: "https://github.com/cert-manager/cert-manager/releases/download/v1.17.2/cert-manager.yaml"
-    dest: "{{ ansible_user_dir }}/cert_manager_install.yaml"
+    dest: "{{ ansible_facts['user_dir'] }}/cert_manager_install.yaml"
     mode: "0755"
 
 - name: Apply cert manager manifest to the cluster
   kubernetes.core.k8s:
     state: present
-    src: "{{ ansible_user_dir }}/cert_manager_install.yaml"
+    src: "{{ ansible_facts['user_dir'] }}/cert_manager_install.yaml"
 
 - name: Wait 15 seconds for cert manager to start
   pause:

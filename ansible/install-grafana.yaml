@@ -48,14 +48,14 @@
 - name: Copy prometheus ingress manifest
   template:
     src: "k8s_manifests/prom_ingress.yaml.j2"
-    dest: "{{ ansible_user_dir }}/prom_ingress.yaml"
+    dest: "{{ ansible_facts['user_dir'] }}/prom_ingress.yaml"
     mode: "0644"
 
 - name: Apply prometheus manifest to the cluster
   kubernetes.core.k8s:
     state: present
     namespace: monitoring
-    src: "{{ ansible_user_dir }}/prom_ingress.yaml"
+    src: "{{ ansible_facts['user_dir'] }}/prom_ingress.yaml"
 
 - name: Print URL
   debug:

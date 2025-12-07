@@ -39,8 +39,8 @@
     path: /etc/ansible/facts.d
     state: directory
     recurse: true
-    owner: "{{ ansible_user_uid }}"
-    group: "{{ ansible_user_gid }}"
+    owner: "{{ ansible_facts['user_uid'] }}"
+    group: "{{ ansible_facts['user_gid'] }}"
   become: true
 
 - name: Create fact file

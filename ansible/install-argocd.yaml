@@ -29,14 +29,14 @@
 - name: Copy argocd ingress manifest
   template:
     src: "k8s_manifests/argocd_ingress.yaml.j2"
-    dest: "{{ ansible_user_dir }}/argocd_ingress.yaml"
+    dest: "{{ ansible_facts['user_dir'] }}/argocd_ingress.yaml"
     mode: "0644"
 
 - name: Apply argocd manifest to the cluster
   kubernetes.core.k8s:
     state: present
     namespace: argocd
-    src: "{{ ansible_user_dir }}/argocd_ingress.yaml"
+    src: "{{ ansible_facts['user_dir'] }}/argocd_ingress.yaml"
 
 - name: Fetch admin password by name
   shell: kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
