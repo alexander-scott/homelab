@@ -45,17 +45,17 @@
           root_url = http://{{ hostname | default(default_hostname) }}/grafana/
           serve_from_sub_path = true
 
-- name: Copy prometheus ingress manifest
+- name: Copy Grafana ingress manifest
   template:
-    src: "k8s_manifests/prom_ingress.yaml.j2"
-    dest: "{{ ansible_facts['user_dir'] }}/prom_ingress.yaml"
+    src: "k8s_manifests/grafana_ingress.yaml.j2"
+    dest: "{{ ansible_facts['user_dir'] }}/grafana_ingress.yaml"
     mode: "0644"
 
-- name: Apply prometheus manifest to the cluster
+- name: Apply Grafana manifest to the cluster
   kubernetes.core.k8s:
     state: present
     namespace: monitoring
-    src: "{{ ansible_facts['user_dir'] }}/prom_ingress.yaml"
+    src: "{{ ansible_facts['user_dir'] }}/grafana_ingress.yaml"
 
 - name: Print URL
   debug:

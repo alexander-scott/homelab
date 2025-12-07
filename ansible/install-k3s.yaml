@@ -40,7 +40,7 @@
   community.general.snap:
     name: helm
     classic: true
-    channel: 3.7/stable # There are breaking changes in 4 (unknown flag: --all)
+    channel: latest/edge # There are breaking changes in 4 (unknown flag: --all)
   become: true
 
 - name: Download cert-manager manifests
