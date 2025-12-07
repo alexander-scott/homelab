@@ -33,4 +33,4 @@
         hosts:
           - "{{ hostname | default(default_hostname) }}"
       # If using in the real world, set up admin.existingSecret instead.
-      adminPassword: admin
+      # adminPassword: admin
