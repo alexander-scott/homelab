@@ -82,6 +82,11 @@ def spin_up_ec2_instance(
         subnet_id=subnet_1a.id,
         vpc_security_group_ids=[group.id],
         key_name=key_pair.key_name,
+        root_block_device={
+            "volume_size": 100,
+            "volume_type": "gp3",
+            "delete_on_termination": True,
+        },
     )
 
     lb = ec2.Eip(f"{resource_prefix}-eip", instance=instance.id, domain="vpc")
