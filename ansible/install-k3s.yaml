@@ -36,11 +36,31 @@
     remote_src: true
   become: true
 
+- name: Update bashrc for KUBECONFIG env var
+  lineinfile:
+    dest: "{{ ansible_facts['user_dir'] }}/.bashrc"
+    line: "export KUBECONFIG=~/.kube/config"
+    regexp: ".*KUBECONFIG.*"
+    owner: "{{ ansible_user }}"
+    state: present
+    insertafter: EOF
+    create: True
+
+- name: Update bashrc for kubectl auto-completion
+  lineinfile:
+    dest: "{{ ansible_facts['user_dir'] }}/.bashrc"
+    line: "source <(kubectl completion bash)"
+    regexp: ".*kubectl completion bash.*"
+    owner: "{{ ansible_user }}"
+    state: present
+    insertafter: EOF
+    create: True
+
 - name: Install helm
   community.general.snap:
     name: helm
     classic: true
-    channel: 3.7/stable # There are breaking changes in 4 (unknown flag: --all)
+    channel: latest/edge # There are breaking changes in 4 (unknown flag: --all)
   become: true
 
 - name: Download cert-manager manifests
