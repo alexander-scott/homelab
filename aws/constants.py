@@ -1,14 +1,16 @@
 from enum import Enum
 
 try:
-    from private_constants import _PUBLIC_KEYPAIR, _SUBNET_ID, _VPC_ID
+    from private_constants import _PUBLIC_KEYPAIR, _SUBNET_ID, _SUBNET_ID_2, _VPC_ID
 
     VPC_ID = _VPC_ID
     SUBNET_ID = _SUBNET_ID
+    SUBNET_ID_2 = _SUBNET_ID_2
     PUBLIC_KEYPAIR = _PUBLIC_KEYPAIR
 except ImportError:
     VPC_ID = ""
     SUBNET_ID = ""
+    SUBNET_ID_2 = ""
     PUBLIC_KEYPAIR = ""
 
 

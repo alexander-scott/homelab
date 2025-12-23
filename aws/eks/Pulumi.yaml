@@ -1,0 +1,10 @@
+name: eks
+description: A minimal AWS Python Pulumi program that spins up an EKS cluster
+runtime:
+  name: python
+  options:
+    toolchain: uv
+config:
+  pulumi:tags:
+    value:
+      pulumi:template: aws-python
