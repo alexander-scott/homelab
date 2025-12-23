@@ -1,6 +1,5 @@
-name: project
-description: A minimal AWS Python Pulumi program
-main: aws
+name: ec2
+description: A minimal AWS Python Pulumi program that spins up an EC2 instance
 runtime:
   name: python
   options:
