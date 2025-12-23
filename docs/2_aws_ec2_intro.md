@@ -67,3 +67,5 @@ And destroy them when you're done with:
 ```bash
 $ pulumi destroy
 ```
+
+Note: You'll need to pass `-C aws/ec2` if the current working directory is not the `aws/ec2` dir.
