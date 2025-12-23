@@ -185,3 +185,4 @@ ssh_keys/
 aws/private_constants.py
 ansible/private_inventory.yaml
 private_README.md
+kubeconfig.yml
