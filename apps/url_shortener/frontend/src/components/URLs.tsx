@@ -3,8 +3,7 @@ import {
   Box,
   Button,
   Container,
-  Flex,
-  Input,
+  DialogActionTrigger,
   DialogBody,
   DialogContent,
   DialogFooter,
@@ -12,9 +11,10 @@ import {
   DialogRoot,
   DialogTitle,
   DialogTrigger,
+  Flex,
+  Input,
   Stack,
   Text,
-  DialogActionTrigger,
 } from "@chakra-ui/react";
 
 
@@ -61,7 +61,6 @@ function AddURL() {
       "id": String(urls.length + 1),
       "item": item
     }
-    console.log(JSON.stringify(newURL))
 
     fetch("http://localhost:8000/url", {
       method: "POST",
