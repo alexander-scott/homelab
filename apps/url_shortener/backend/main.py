@@ -1,6 +1,8 @@
-from typing import Annotated, Generator, Sequence
+from contextlib import asynccontextmanager
+from typing import Annotated, AsyncGenerator, Generator, Sequence
 
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.params import Depends, Query
 from fastapi.responses import PlainTextResponse, RedirectResponse
 from sqlmodel import Field, Session, SQLModel, create_engine, select
@@ -17,12 +19,23 @@ def get_session() -> Generator[Session, None, None]:
 
 SessionDep = Annotated[Session, Depends(get_session)]
 
-app = FastAPI()
 
-
-@app.on_event("startup")
-def on_startup() -> None:
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     SQLModel.metadata.create_all(engine)
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173", "localhost:5173"],  # Our web app
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 class URL(SQLModel, table=True):  # type: ignore
@@ -46,6 +59,40 @@ def create_url(new_url: URL, session: SessionDep) -> URL:
     session.commit()
     session.refresh(new_url)
     return new_url
+
+
+todos = [{"id": "1", "item": "Read a book."}, {"id": "2", "item": "Cycle around town."}]
+
+
+@app.get("/todo", tags=["todos"])
+async def get_todos() -> dict[str, list[dict[str, str]]]:
+    return {"data": todos}
+
+
+@app.post("/todo", tags=["todos"])
+async def add_todo(todo: dict[str, str]) -> dict[str, set[str]]:
+    todos.append(todo)
+    return {"data": {"Todo added."}}
+
+
+@app.put("/todo/{id}", tags=["todos"])
+async def update_todo(id: int, body: dict[str, str]) -> dict[str, str]:
+    for todo in todos:
+        if int(todo["id"]) == id:
+            todo["item"] = body["item"]
+            return {"data": f"Todo with id {id} has been updated."}
+
+    return {"data": f"Todo with id {id} not found."}
+
+
+@app.delete("/todo/{id}", tags=["todos"])
+async def delete_todo(id: int) -> dict[str, str]:
+    for todo in todos:
+        if int(todo["id"]) == id:
+            todos.remove(todo)
+            return {"data": f"Todo with id {id} has been removed."}
+
+    return {"data": f"Todo with id {id} not found."}
 
 
 @app.get("/{arg}")
