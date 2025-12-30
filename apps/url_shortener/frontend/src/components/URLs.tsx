@@ -18,38 +18,38 @@ import {
 } from "@chakra-ui/react";
 
 
-interface Todo {
+interface URL {
   id: string;
   item: string;
 }
 
-interface UpdateTodoProps {
+interface UpdateURLProps {
   item: string;
   id: string;
-  fetchTodos: () => void;
+  fetchURLs: () => void;
 }
 
-interface DeleteTodoProps {
+interface DeleteURLProps {
   id: string;
-  fetchTodos: () => void;
+  fetchURLs: () => void;
 }
 
-interface TodoHelperProps {
+interface URLHelperProps {
   item: string;
   id: string;
-  fetchTodos: () => void;
+  fetchURLs: () => void;
 }
 
-const TodosContext = createContext<{
-  todos: Todo[];
-  fetchTodos: () => void;
+const URLsContext = createContext<{
+  urls: URL[];
+  fetchURLs: () => void;
 }>({
-  todos: [], fetchTodos: () => {}
+  urls: [], fetchURLs: () => {}
 })
 
-function AddTodo() {
+function AddURL() {
   const [item, setItem] = React.useState("")
-  const {todos, fetchTodos} = React.useContext(TodosContext)
+  const {urls: urls, fetchURLs: fetchURLs} = React.useContext(URLsContext)
 
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setItem(event.target.value)
@@ -57,16 +57,17 @@ function AddTodo() {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const newTodo = {
-      "id": todos.length + 1,
+    const newURL = {
+      "id": String(urls.length + 1),
       "item": item
     }
+    console.log(JSON.stringify(newURL))
 
-    fetch("http://localhost:8000/todo", {
+    fetch("http://localhost:8000/url", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newTodo)
-    }).then(fetchTodos)
+      body: JSON.stringify(newURL)
+    }).then(fetchURLs)
   }
 
   return (
@@ -74,23 +75,23 @@ function AddTodo() {
       <Input
         pr="4.5rem"
         type="text"
-        placeholder="Add a todo item"
-        aria-label="Add a todo item"
+        placeholder="Add a URL item"
+        aria-label="Add a URL item"
         onChange={handleInput}
       />
     </form>
   )
 }
 
-function TodoHelper({item, id, fetchTodos}: TodoHelperProps) {
+function URLHelper({item, id, fetchURLs: fetchURLs}: URLHelperProps) {
   return (
     <Box p={1} shadow="sm">
       <Flex justify="space-between">
         <Text mt={4} as="div">
           {item}
           <Flex align="end">
-            <UpdateTodo item={item} id={id} fetchTodos={fetchTodos}/>
-            <DeleteTodo id={id} fetchTodos={fetchTodos}/>  {/* new */}
+            <UpdateURL item={item} id={id} fetchURLs={fetchURLs}/>
+            <DeleteURL id={id} fetchURLs={fetchURLs}/>  {/* new */}
           </Flex>
         </Text>
       </Flex>
@@ -98,37 +99,37 @@ function TodoHelper({item, id, fetchTodos}: TodoHelperProps) {
   )
 }
 
-const DeleteTodo = ({ id, fetchTodos }: DeleteTodoProps) => {
-  const deleteTodo = async () => {
-    await fetch(`http://localhost:8000/todo/${id}`, {
+const DeleteURL = ({ id, fetchURLs: fetchURLs }: DeleteURLProps) => {
+  const deleteURL = async () => {
+    await fetch(`http://localhost:8000/url/${id}`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id: id })
     })
-    await fetchTodos()
+    await fetchURLs()
   }
 
   return (
-    <Button h="1.5rem" size="sm" marginLeft={2} onClick={deleteTodo}>Delete Todo</Button>
+    <Button h="1.5rem" size="sm" marginLeft={2} onClick={deleteURL}>Delete URL</Button>
   )
 }
 
-const UpdateTodo = ({ item, id, fetchTodos }: UpdateTodoProps) => {
-  const [todo, setTodo] = useState(item);
-  const updateTodo = async () => {
-    await fetch(`http://localhost:8000/todo/${id}`, {
+const UpdateURL = ({ item, id, fetchURLs: fetchURLs }: UpdateURLProps) => {
+  const [url, setURL] = useState(item);
+  const updateURL = async () => {
+    await fetch(`http://localhost:8000/url/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ item: todo }),
+      body: JSON.stringify({ item: url }),
     });
-    await fetchTodos();
+    await fetchURLs();
   };
 
   return (
     <DialogRoot>
       <DialogTrigger asChild>
         <Button h="1.5rem" size="sm">
-          Update Todo
+          Update URL
         </Button>
       </DialogTrigger>
       <DialogContent
@@ -145,59 +146,57 @@ const UpdateTodo = ({ item, id, fetchTodos }: UpdateTodoProps) => {
         zIndex={1000}
       >
         <DialogHeader>
-          <DialogTitle>Update Todo</DialogTitle>
+          <DialogTitle>Update URL</DialogTitle>
         </DialogHeader>
         <DialogBody>
           <Input
             pr="4.5rem"
             type="text"
-            placeholder="Add a todo item"
-            aria-label="Add a todo item"
-            value={todo}
-            onChange={event => setTodo(event.target.value)}
+            placeholder="Add a URL item"
+            aria-label="Add a URL item"
+            value={url}
+            onChange={event => setURL(event.target.value)}
           />
         </DialogBody>
         <DialogFooter>
           <DialogActionTrigger asChild>
             <Button variant="outline" size="sm">Cancel</Button>
           </DialogActionTrigger>
-          <Button size="sm" onClick={updateTodo}>Save</Button>
+          <Button size="sm" onClick={updateURL}>Save</Button>
         </DialogFooter>
       </DialogContent>
     </DialogRoot>
   )
 }
 
-export default function Todos() {
-  const [todos, setTodos] = useState<Todo[]>([])
-  const fetchTodos = async () => {
-    const response = await fetch("http://localhost:8000/todo")
-    const todos = await response.json()
-    setTodos(todos.data)
-    console.log("Test")
+export default function URLs() {
+  const [urls, setURLs] = useState<URL[]>([])
+  const fetchURLs = async () => {
+    const response = await fetch("http://localhost:8000/url")
+    const urls = await response.json()
+    setURLs(urls.data)
   }
   useEffect(() => {
-    const loadTodos = async () => {
-      const response = await fetch("http://localhost:8000/todo")
-      const todos = await response.json()
-      setTodos(todos.data)
-      console.log("Test")
+    const loadURLs = async () => {
+      const response = await fetch("http://localhost:8000/url")
+      const urls = await response.json()
+      setURLs(urls.data)
     }
-    loadTodos()
+    loadURLs()
   }, [])
 
   return (
-    <TodosContext.Provider value={{todos, fetchTodos}}>
+    <URLsContext.Provider value={{urls: urls, fetchURLs: fetchURLs}}>
       <Container maxW="container.xl" pt="100px">
-        <AddTodo />
+        <AddURL />
         <Stack gap={5}>
             {
-            todos.map((todo) => (
-                <TodoHelper item={todo.item} id={todo.id} fetchTodos={fetchTodos}/>
+            urls.map((url) => (
+                <URLHelper key={url.id} item={url.item} id={url.id} fetchURLs={fetchURLs}/>
             ))
             }
         </Stack>
       </Container>
-    </TodosContext.Provider>
+    </URLsContext.Provider>
   )
 }

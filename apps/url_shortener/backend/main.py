@@ -61,38 +61,38 @@ def create_url(new_url: URL, session: SessionDep) -> URL:
     return new_url
 
 
-todos = [{"id": "1", "item": "Read a book."}, {"id": "2", "item": "Cycle around town."}]
+urls = [{"id": "1", "item": "www.google.com"}, {"id": "2", "item": "www.youtube.com"}]
 
 
-@app.get("/todo", tags=["todos"])
-async def get_todos() -> dict[str, list[dict[str, str]]]:
-    return {"data": todos}
+@app.get("/url", tags=["urls"])
+async def get_urls() -> dict[str, list[dict[str, str]]]:
+    return {"data": urls}
 
 
-@app.post("/todo", tags=["todos"])
-async def add_todo(todo: dict[str, str]) -> dict[str, set[str]]:
-    todos.append(todo)
-    return {"data": {"Todo added."}}
+@app.post("/url", tags=["urls"])
+async def add_url(url: dict[str, str]) -> dict[str, set[str]]:
+    urls.append(url)
+    return {"data": {"URL added."}}
 
 
-@app.put("/todo/{id}", tags=["todos"])
-async def update_todo(id: int, body: dict[str, str]) -> dict[str, str]:
-    for todo in todos:
-        if int(todo["id"]) == id:
-            todo["item"] = body["item"]
-            return {"data": f"Todo with id {id} has been updated."}
+@app.put("/url/{id}", tags=["urls"])
+async def update_url(id: int, body: dict[str, str]) -> dict[str, str]:
+    for url in urls:
+        if int(url["id"]) == id:
+            url["item"] = body["item"]
+            return {"data": f"URL with id {id} has been updated."}
 
-    return {"data": f"Todo with id {id} not found."}
+    return {"data": f"URL with id {id} not found."}
 
 
-@app.delete("/todo/{id}", tags=["todos"])
-async def delete_todo(id: int) -> dict[str, str]:
-    for todo in todos:
-        if int(todo["id"]) == id:
-            todos.remove(todo)
-            return {"data": f"Todo with id {id} has been removed."}
+@app.delete("/url/{id}", tags=["urls"])
+async def delete_url(id: int) -> dict[str, str]:
+    for url in urls:
+        if int(url["id"]) == id:
+            urls.remove(url)
+            return {"data": f"URL with id {id} has been removed."}
 
-    return {"data": f"Todo with id {id} not found."}
+    return {"data": f"URL with id {id} not found."}
 
 
 @app.get("/{arg}")

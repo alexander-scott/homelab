@@ -1,14 +1,13 @@
 import { ChakraProvider } from '@chakra-ui/react'
 import { defaultSystem } from "@chakra-ui/react"
 import Header from "./components/Header";
-import Todos from "./components/Todos";  // new
+import URLs from "./components/URLs";  // new
 
 function App() {
-  console.log("bla")
   return (
     <ChakraProvider value={defaultSystem}>
       <Header />
-      <Todos />
+      <URLs />
     </ChakraProvider>
   )
 }
