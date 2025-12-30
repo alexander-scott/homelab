@@ -1,0 +1,12 @@
+[project]
+name = "eks"
+version = "0.1.0"
+description = "Pulumi project to spin up an EKS cluster on AWS"
+readme = "README.md"
+dependencies = [
+    "pulumi>=3.0.0,<4.0.0",
+    "pulumi-aws>=6.0.2,<8.0.0",
+    "pulumi-command>=1.1.3",
+    "pulumi-eks>=4.1.0",
+    "pulumi-kubernetes>=4.24.1"
+]

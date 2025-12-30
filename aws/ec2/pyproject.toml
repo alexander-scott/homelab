@@ -1,0 +1,10 @@
+[project]
+name = "ec2"
+version = "0.1.0"
+description = "Pulumi project to spin up an EC2 machine on AWS"
+readme = "README.md"
+dependencies = [
+    "pulumi>=3.0.0,<4.0.0",
+    "pulumi-aws>=6.0.2,<8.0.0",
+    "pulumi-command>=1.1.3",
+]
