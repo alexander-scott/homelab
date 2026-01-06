@@ -1,0 +1,9 @@
+[project]
+name = "url-shortener-backend"
+version = "0.1.0"
+description = "Backend for the URL shortener app"
+readme = "README.md"
+dependencies = [
+    "fastapi[standard]>=0.115.14",
+    "sqlmodel>=0.0.24"
+]
