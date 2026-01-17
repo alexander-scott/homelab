@@ -13,14 +13,5 @@
       include_tasks: install-k3s.yaml
       when: not ansible_local.install_k3s is defined
 
-    - name: Run install-whoami.yaml tasks
-      include_tasks: install-whoami.yaml
-
-    - name: Run install-grafana.yaml tasks
-      include_tasks: install-grafana.yaml
-
-    # - name: Run install-argocd.yaml tasks
-    #   include_tasks: install-argocd.yaml
-
-    # - name: Run install-pihole.yaml tasks
-    #   include_tasks: install-pihole.yaml
+    - name: Run install-operators.yaml tasks
+      include_tasks: install-operators.yaml

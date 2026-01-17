@@ -17,6 +17,21 @@
     name: docker
   become: true
 
+- name: Make sure K3s dir exists
+  file:
+    path: "/etc/rancher/k3s"
+    state: directory
+  become: true
+
+- name: Create K3s configuration file
+  copy:
+    dest: /etc/rancher/k3s/config.yaml
+    mode: 0644
+    content: |
+      tls-san:
+        - "{{ hostname | default(default_hostname) }}"
+  become: true
+
 # Taken from https://docs.k3s.io/quick-start
 - name: Install k3s
   shell: curl -sfL https://get.k3s.io | sh -
@@ -34,6 +49,7 @@
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
     remote_src: true
+    mode: "0600"
   become: true
 
 - name: Update bashrc for KUBECONFIG env var
@@ -62,21 +78,6 @@
     classic: true
     channel: latest/edge # There are breaking changes in 4 (unknown flag: --all)
   become: true
-
-- name: Download cert-manager manifests
-  get_url:
-    url: "https://github.com/cert-manager/cert-manager/releases/download/v1.17.2/cert-manager.yaml"
-    dest: "{{ ansible_facts['user_dir'] }}/cert_manager_install.yaml"
-    mode: "0755"
-
-- name: Apply cert manager manifest to the cluster
-  kubernetes.core.k8s:
-    state: present
-    src: "{{ ansible_facts['user_dir'] }}/cert_manager_install.yaml"
-
-- name: Wait 15 seconds for cert manager to start
-  pause:
-    seconds: 15
 
 - name: Create fact file
   copy:
