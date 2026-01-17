@@ -4,7 +4,6 @@ version = "0.1.0"
 requires-python = "==3.13.*"
 dependencies = [
     "ansible==13.2.0",
-    "pre-commit>=4.2.0",
 ]
 
 [tool.ruff]

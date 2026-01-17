@@ -7,7 +7,7 @@
 First, ensure you have [UV](https://docs.astral.sh/uv/getting-started/installation/) installed on your local machine. Then, set up a virtual environment and install the dependencies from `pyproject.toml` file with:
 
 ```bash
-uv sync
+uv sync --all-packages
 source .venv/bin/activate
 ```
 
@@ -16,6 +16,10 @@ You can also run the pre-commit linters with:
 ```bash
 uv tool run -- pre-commit run --all-files
 ```
+
+> [!NOTE]
+> You can also use the [rust](https://github.com/j178/prek) based version of pre-commit with:
+> `uv tool run -- prek run --all-files`
 
 ### SSH
 
