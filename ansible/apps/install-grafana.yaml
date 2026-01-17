@@ -1,0 +1,60 @@
+- hosts: node
+  vars:
+    default_hostname: "{{ ansible_host | replace('.', '-') }}.nip.io"
+  tasks:
+    - name: Create a k8s namespace
+      kubernetes.core.k8s:
+        name: monitoring
+        api_version: v1
+        kind: Namespace
+        state: present
+
+    - name: Add Prometheus chart repo
+      kubernetes.core.helm_repository:
+        name: prometheus-community
+        repo_url: "https://prometheus-community.github.io/helm-charts"
+        binary_path: /snap/bin/helm
+
+    - name: Deploy Prometheus chart
+      kubernetes.core.helm:
+        binary_path: /snap/bin/helm
+        name: prometheus
+        chart_ref: prometheus-community/kube-prometheus-stack
+        release_namespace: monitoring
+
+    - name: Create configmap
+      kubernetes.core.k8s:
+        namespace: monitoring
+        apply: true
+        definition:
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: prometheus-grafana
+          data:
+            grafana.ini: |
+              [analytics]
+              check_for_updates = false
+              [grafana_net]
+              url = https://grafana.net
+              [log]
+              mode = console
+              [paths]
+              data = /var/lib/grafana/
+              logs = /var/log/grafana
+              plugins = /var/lib/grafana/plugins
+              provisioning = /etc/grafana/provisioning
+              [server]
+              domain = ''
+              root_url = http://{{ hostname | default(default_hostname) }}/grafana/
+              serve_from_sub_path = true
+
+    - name: Apply Grafana manifest to the cluster
+      kubernetes.core.k8s:
+        state: present
+        namespace: monitoring
+        template: data/grafana-ingress.yaml.j2
+
+    - name: Print URL
+      debug:
+        msg: "https://{{ hostname | default(default_hostname) }}/grafana"
