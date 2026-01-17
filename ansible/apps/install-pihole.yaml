@@ -1,6 +1,4 @@
 - hosts: node
-  vars:
-    default_hostname: "{{ ansible_host | replace('.', '-') }}.nip.io"
   tasks:
     - name: Create a k8s namespace
       kubernetes.core.k8s:
@@ -35,6 +33,6 @@
             path: /
             pathType: Prefix
             hosts:
-              - "{{ hostname | default(default_hostname) }}"
+              - "{{ hostname }}"
           # If using in the real world, set up admin.existingSecret instead.
           # adminPassword: admin
