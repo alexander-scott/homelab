@@ -180,6 +180,7 @@ cython_debug/
 bin/
 ssh_keys/
 .pulumi/
+kubeconfig
 
 # private files
 aws/private_constants.py

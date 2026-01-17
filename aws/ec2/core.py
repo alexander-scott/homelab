@@ -57,6 +57,12 @@ def spin_up_ec2_instance(
                 "to_port": 3389,
                 "cidr_blocks": ["0.0.0.0/0"],
             },
+            {  # Necessary for K8s API https://kubernetes.io/docs/concepts/security/controlling-access/
+                "protocol": "tcp",
+                "from_port": 6443,
+                "to_port": 6443,
+                "cidr_blocks": ["0.0.0.0/0"],
+            },
         ],
         # Unlimited outbound internet traffic
         egress=[
@@ -95,7 +101,7 @@ def spin_up_ec2_instance(
 
     local.Command(
         "renderInventoryCmd",
-        create="cat ../ansible/inventory.yaml.example | envsubst > ../ansible/private_inventory.yaml",
+        create="cat ../../ansible/inventory.yaml.example | envsubst > ../../ansible/private_inventory.yaml",
         environment={
             "ANSIBLE_HOST": lb.public_ip,
         },

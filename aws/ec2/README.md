@@ -39,7 +39,6 @@ Finally, copy the `aws/private_constants.py.example` file, rename it to `private
 To check everything is working, run:
 
 ```bash
-$ export AWS_PROFILE=123456789_UserFull
 $ pulumi preview
 Previewing update (homelab):
      Type                      Name             Plan

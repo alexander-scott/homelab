@@ -1,0 +1,15 @@
+- hosts: node
+  tasks:
+    - name: Check to see if host is alive
+      ping:
+
+    - name: Run setup-machine.yaml tasks
+      include_tasks: setup-machine.yaml
+      when: not ansible_local.setup_machine is defined
+
+    - name: Run install-k3s.yaml tasks
+      include_tasks: install-k3s.yaml
+      when: not ansible_local.install_k3s is defined
+
+    - name: Run install-operators.yaml tasks
+      include_tasks: install-operators.yaml
