@@ -19,7 +19,7 @@ metadata:
 spec:
   secretName: domain-tls # <===  Name of secret where the generated certificate will be stored.
   dnsNames:
-    - "{{ hostname | default(default_hostname) }}"
+    - "{{ hostname }}"
   issuerRef:
     name: acme
     kind: Issuer
@@ -34,7 +34,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - host: "{{ hostname | default(default_hostname) }}"
+    - host: "{{ hostname }}"
       http:
         paths:
           - path: /argocd

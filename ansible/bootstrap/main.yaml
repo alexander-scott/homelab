@@ -1,6 +1,4 @@
 - hosts: node
-  vars:
-    default_hostname: "{{ ansible_host | replace('.', '-') }}.nip.io"
   tasks:
     - name: Check to see if host is alive
       ping:

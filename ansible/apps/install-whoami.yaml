@@ -1,6 +1,4 @@
 - hosts: node
-  vars:
-    default_hostname: "{{ ansible_host | replace('.', '-') }}.nip.io"
   tasks:
     - name: Create a k8s namespace
       kubernetes.core.k8s:
@@ -17,4 +15,4 @@
 
     - name: Print URL
       debug:
-        msg: "https://{{ hostname | default(default_hostname) }}/whoami"
+        msg: "https://{{ hostname }}/whoami"

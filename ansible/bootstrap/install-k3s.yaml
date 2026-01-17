@@ -29,7 +29,7 @@
     mode: 0644
     content: |
       tls-san:
-        - "{{ hostname | default(default_hostname) }}"
+        - "{{ hostname }}"
   become: true
 
 # Taken from https://docs.k3s.io/quick-start

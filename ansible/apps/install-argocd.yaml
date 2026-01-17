@@ -1,6 +1,4 @@
 - hosts: node
-  vars:
-    default_hostname: "{{ ansible_host | replace('.', '-') }}.nip.io"
   tasks:
     - name: Create a k8s namespace
       kubernetes.core.k8s:
@@ -28,7 +26,7 @@
               server.insecure: true
               server.rootpath: /argocd
           global:
-            domain: "{{ hostname | default(default_hostname) }}"
+            domain: "{{ hostname }}"
 
     - name: Apply argocd manifest to the cluster
       kubernetes.core.k8s:
@@ -42,7 +40,7 @@
 
     - name: Print URL
       debug:
-        msg: "https://{{ hostname | default(default_hostname) }}/argocd"
+        msg: "https://{{ hostname }}/argocd"
 
     - name: Print admin password
       debug:
