@@ -19,4 +19,3 @@
     release_namespace: cert-manager
     set_values:
       - value: crds.enabled=true
-        value_type: string
