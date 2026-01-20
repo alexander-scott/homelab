@@ -7,51 +7,45 @@
         kind: Namespace
         state: present
 
-    - name: Add Prometheus chart repo
-      kubernetes.core.helm_repository:
-        name: prometheus-community
-        repo_url: "https://prometheus-community.github.io/helm-charts"
-        binary_path: /snap/bin/helm
-
-    - name: Deploy Prometheus chart
-      kubernetes.core.helm:
-        binary_path: /snap/bin/helm
-        name: prometheus
-        chart_ref: prometheus-community/kube-prometheus-stack
-        release_namespace: monitoring
-
-    - name: Create configmap
-      kubernetes.core.k8s:
-        namespace: monitoring
-        apply: true
-        definition:
-          apiVersion: v1
-          kind: ConfigMap
-          metadata:
-            name: prometheus-grafana
-          data:
-            grafana.ini: |
-              [analytics]
-              check_for_updates = false
-              [grafana_net]
-              url = https://grafana.net
-              [log]
-              mode = console
-              [paths]
-              data = /var/lib/grafana/
-              logs = /var/log/grafana
-              plugins = /var/lib/grafana/plugins
-              provisioning = /etc/grafana/provisioning
-              [server]
-              domain = ''
-              root_url = http://{{ hostname }}/grafana/
-              serve_from_sub_path = true
-
     - name: Apply Grafana manifest to the cluster
       kubernetes.core.k8s:
         state: present
         namespace: monitoring
-        template: data/grafana-ingress.yaml.j2
+        template: data/grafana-certs.yaml.j2
+
+    # https://github.com/grafana/helm-charts/blob/main/charts/grafana/values.yaml
+    - name: Add Grafana chart repo
+      kubernetes.core.helm_repository:
+        name: grafana
+        repo_url: "https://grafana.github.io/helm-charts"
+        binary_path: /snap/bin/helm
+
+    - name: Deploy Grafana chart
+      kubernetes.core.helm:
+        binary_path: /snap/bin/helm
+        name: grafana
+        chart_ref: grafana/grafana
+        release_namespace: monitoring
+        force: True
+        values:
+          baseURL: "{{ hostname }}"
+          grafana.ini:
+            server:
+              domain: "{{ hostname }}"
+              root_url: "https://{{ hostname }}/grafana/"
+              serve_from_sub_path: true
+          ingress:
+            enabled: true
+            ingressClassName: traefik
+            annotations:
+              cert.manager.io/cluster-issuer: grafana
+              traefik.ingress.kubernetes.io/router.entrypoints: web, websecure
+            path: /grafana
+            pathType: Prefix
+            hosts:
+              - "{{ hostname }}"
+            tls:
+              - secretName: domain-tls # pragma: allowlist secret
 
     - name: Print URL
       debug:

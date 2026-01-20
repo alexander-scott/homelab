@@ -40,3 +40,10 @@ In the apps folder are some additional apps you can install in the cluster. You 
 ```bash
 $ ansible-playbook ansible/apps/install-whoami.yaml -i ansible/private_inventory.yaml
 ```
+
+Most of the applications are installed as helm charts. Here are some helpful helm commands:
+
+```bash
+$ helm list -n monitoring
+$ helm get values grafana -n monitoring
+```
