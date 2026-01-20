@@ -1,4 +1,6 @@
 - hosts: node
+  vars:
+    k8s_namespace: whoami
   tasks:
     - name: Create a k8s namespace
       kubernetes.core.k8s:
@@ -7,12 +9,18 @@
         kind: Namespace
         state: present
 
+    - name: Create whoami certificate issuer
+      kubernetes.core.k8s:
+        state: present
+        namespace: "{{ k8s_namespace }}"
+        template: data/certificate-issuer.yaml.j2
+
     - name: Apply whoami manifest to the cluster
       kubernetes.core.k8s:
         state: present
-        namespace: whoami
+        namespace: "{{ k8s_namespace }}"
         template: data/whoami-ingress.yaml.j2
 
     - name: Print URL
       debug:
-        msg: "https://{{ hostname }}/whoami"
+        msg: "https://{{ hostname }}/{{ k8s_namespace }}"

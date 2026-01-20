@@ -1,17 +1,19 @@
 - hosts: node
+  vars:
+    k8s_namespace: monitoring
   tasks:
     - name: Create a k8s namespace
       kubernetes.core.k8s:
-        name: monitoring
+        name: "{{ k8s_namespace }}"
         api_version: v1
         kind: Namespace
         state: present
 
-    - name: Apply Grafana manifest to the cluster
+    - name: Create Grafana certificate issuer
       kubernetes.core.k8s:
         state: present
-        namespace: monitoring
-        template: data/grafana-certs.yaml.j2
+        namespace: "{{ k8s_namespace }}"
+        template: data/certificate-issuer.yaml.j2
 
     # https://github.com/grafana/helm-charts/blob/main/charts/grafana/values.yaml
     - name: Add Grafana chart repo
@@ -25,7 +27,7 @@
         binary_path: /snap/bin/helm
         name: grafana
         chart_ref: grafana/grafana
-        release_namespace: monitoring
+        release_namespace: "{{ k8s_namespace }}"
         force: True
         values:
           baseURL: "{{ hostname }}"
@@ -40,7 +42,7 @@
             annotations:
               cert.manager.io/cluster-issuer: grafana
               traefik.ingress.kubernetes.io/router.entrypoints: web, websecure
-            path: /grafana
+            path: "/grafana"
             pathType: Prefix
             hosts:
               - "{{ hostname }}"

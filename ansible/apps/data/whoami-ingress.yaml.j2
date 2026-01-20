@@ -34,32 +34,6 @@ spec:
   selector:
     app: whoami
 ---
-apiVersion: cert-manager.io/v1
-kind: Issuer
-metadata:
-  name: acme
-spec:
-  acme:
-    server: https://acme-v02.api.letsencrypt.org/directory
-    privateKeySecretRef:
-      name: acme
-    solvers:
-      - http01:
-          ingress:
-            ingressClassName: traefik
----
-apiVersion: cert-manager.io/v1
-kind: Certificate
-metadata:
-  name: whoami
-spec:
-  secretName: domain-tls # <===  Name of secret where the generated certificate will be stored.
-  dnsNames:
-    - "{{ hostname }}"
-  issuerRef:
-    name: acme
-    kind: Issuer
----
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
