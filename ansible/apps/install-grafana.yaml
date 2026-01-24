@@ -49,6 +49,16 @@
             tls:
               - secretName: domain-tls # pragma: allowlist secret
 
+    - name: Fetch admin password by name
+      shell: kubectl get secret grafana -n {{ k8s_namespace }} -o jsonpath="{.data.admin-password}" | base64 -d
+      environment:
+        KUBECONFIG: /home/ubuntu/.kube/config
+      register: admin_secret
+
     - name: Print URL
       debug:
         msg: "https://{{ hostname }}/grafana"
+
+    - name: Print admin password
+      debug:
+        var: admin_secret.stdout
