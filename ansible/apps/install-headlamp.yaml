@@ -1,0 +1,43 @@
+- hosts: node
+  vars:
+    k8s_namespace: kube-system
+  tasks:
+    - name: Create Headlamp certificate issuer
+      kubernetes.core.k8s:
+        state: present
+        namespace: "{{ k8s_namespace }}"
+        template: data/certificate-issuer.yaml.j2
+
+    # https://github.com/kubernetes-sigs/headlamp/blob/main/charts/headlamp/values.yaml
+    - name: Add Headlamp chart repo
+      kubernetes.core.helm_repository:
+        name: headlamp
+        repo_url: "https://kubernetes-sigs.github.io/headlamp/"
+        binary_path: /snap/bin/helm
+
+    - name: Deploy Headlamp chart
+      kubernetes.core.helm:
+        binary_path: /snap/bin/helm
+        name: headlamp
+        chart_ref: headlamp/headlamp
+        release_namespace: "{{ k8s_namespace }}"
+        values:
+          ingress:
+            enabled: true
+            ingressClassName: traefik
+            annotations:
+              cert.manager.io/cluster-issuer: headlamp
+              traefik.ingress.kubernetes.io/router.entrypoints: web, websecure
+            hosts:
+              - host: "{{ hostname }}"
+                paths:
+                  - path: /headlamp
+                    type: Prefix
+            tls:
+              - secretName: domain-tls # pragma: allowlist secret
+                hosts:
+                  - "{{ hostname }}"
+
+    - name: Print URL
+      debug:
+        msg: "https://{{ hostname }}/headlamp"
