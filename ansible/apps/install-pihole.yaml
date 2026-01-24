@@ -1,11 +1,19 @@
 - hosts: node
+  vars:
+    k8s_namespace: pihole
   tasks:
     - name: Create a k8s namespace
       kubernetes.core.k8s:
-        name: pihole
+        name: "{{ k8s_namespace }}"
         api_version: v1
         kind: Namespace
         state: present
+
+    - name: Create pihole certificate issuer
+      kubernetes.core.k8s:
+        state: present
+        namespace: "{{ k8s_namespace }}"
+        template: data/certificate-issuer.yaml.j2
 
     - name: Add Pihole chart repo
       kubernetes.core.helm_repository:
@@ -18,21 +26,25 @@
         binary_path: /snap/bin/helm
         name: pihole
         chart_ref: mojo2600/pihole
-        release_namespace: pihole
+        release_namespace: "{{ k8s_namespace }}"
         values:
-          persistentVolumeClaim:
-            enabled: true
-          dnsHostPort:
-            enabled: true
           ingress:
             enabled: true
             ingressClassName: traefik
             annotations:
               cert.manager.io/cluster-issuer: pihole
               traefik.ingress.kubernetes.io/router.entrypoints: web, websecure
-            path: /
+            path: /pihole
             pathType: Prefix
             hosts:
               - "{{ hostname }}"
+            tls:
+              - secretName: domain-tls # pragma: allowlist secret
+                hosts:
+                  - "{{ hostname }}"
           # If using in the real world, set up admin.existingSecret instead.
           # adminPassword: admin
+
+    - name: Print URL
+      debug:
+        msg: "https://{{ hostname }}/pihole"
