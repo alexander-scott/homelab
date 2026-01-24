@@ -1,11 +1,19 @@
 - hosts: node
+  vars:
+    k8s_namespace: argocd
   tasks:
     - name: Create a k8s namespace
       kubernetes.core.k8s:
-        name: argocd
+        name: "{{ k8s_namespace }}"
         api_version: v1
         kind: Namespace
         state: present
+
+    - name: Create Argocd certificate issuer
+      kubernetes.core.k8s:
+        state: present
+        namespace: "{{ k8s_namespace }}"
+        template: data/certificate-issuer.yaml.j2
 
     - name: Add Argocd chart repo
       kubernetes.core.helm_repository:
@@ -13,13 +21,31 @@
         repo_url: "https://argoproj.github.io/argo-helm"
         binary_path: /snap/bin/helm
 
+    # https://github.com/argoproj/argo-helm/blob/main/charts/argo-cd/values.yaml
     - name: Deploy Argocd chart using set values on target
       kubernetes.core.helm:
         binary_path: /snap/bin/helm
         name: argocd
         chart_ref: argo/argo-cd
-        release_namespace: argocd
+        release_namespace: "{{ k8s_namespace }}"
         values:
+          server:
+            ingress:
+              enabled: true
+              controller: aws
+              ingressClassName: traefik
+              hostname: "{{ hostname }}"
+              annotations:
+                cert.manager.io/cluster-issuer: argocd
+                traefik.ingress.kubernetes.io/router.entrypoints: web, websecure
+              path: "/argocd"
+              pathType: Prefix
+              hosts:
+                - "{{ hostname }}"
+              extraTls:
+                - hosts:
+                    - "{{ hostname }}"
+                  secretName: domain-tls # pragma: allowlist secret
           configs:
             params:
               server.basehref: /argocd
@@ -28,14 +54,10 @@
           global:
             domain: "{{ hostname }}"
 
-    - name: Apply argocd manifest to the cluster
-      kubernetes.core.k8s:
-        state: present
-        namespace: argocd
-        template: data/argocd-ingress.yaml.j2
-
     - name: Fetch admin password by name
       shell: kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+      environment:
+        KUBECONFIG: /home/ubuntu/.kube/config
       register: admin_secret
 
     - name: Print URL
