@@ -16,9 +16,7 @@ except ImportError:
 
 class AMI_ID(str, Enum):  # noqa: N801
     UBUNTU_SERVER_2404 = "ami-0fd8fe5cdf7cad6f6"  # Ubuntu Server 24.04 LTS (HVM) (ARM)
-    WINDOWS_SERVER_2025 = (
-        "ami-02875f678fa0d1eb2"  # Microsoft Windows Server 2025 Full Locale English
-    )
+    WINDOWS_SERVER_2025 = "ami-0fa2863f423f8795e"  # Windows_Server-2025-English-Full-EKS_Optimized-1.35-2026.01.22
 
 
 # Finding AMI IDs
