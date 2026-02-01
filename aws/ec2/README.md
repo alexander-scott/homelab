@@ -68,3 +68,18 @@ $ pulumi destroy
 ```
 
 Note: You'll need to pass `-C aws/ec2` if the current working directory is not the `aws/ec2` dir.
+
+### Accessing the EC2 instance
+
+On Linux, it can simply be accessed over SSH:
+
+```bash
+$ ssh -i ./ssh_keys/id_rsa ubuntu@{IP_ADDRESS}
+```
+
+On Windows, you can also access it over remote desktop. On Macos, the [`Windows app`](https://apps.apple.com/us/app/windows-app/id1295203466?mt=12) is a great way to do this and you just need to provide the IP address and username and password. The default username is `Administrator`, and the password will depend on the keys used. This can easily be retrieved via the AWS however:
+
+```bash
+$ aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" --query 'Reservations[*].Instances[*].[InstanceId,InstanceType,State.Name,PublicIpAddress,PrivateIpAddress,Tags[?Key==`Name`].Value|[0]]' --output table
+$ aws ec2 get-password-data --instance-id <instance-id> --priv-launch-key <path-to-pem-file>
+```
