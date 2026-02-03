@@ -19,7 +19,7 @@
       kubernetes.core.k8s:
         state: present
         namespace: "{{ k8s_namespace }}"
-        template: data/whoami-ingress.yaml.j2
+        template: data/whoami-spec.yaml.j2
 
     - name: Print URL
       debug:
