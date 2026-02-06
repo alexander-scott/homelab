@@ -58,6 +58,7 @@ docstring-code-line-length = "dynamic"
 
 [tool.uv.workspace]
 members = [
+    "apps/url_shortener/backend",
     "aws/ec2",
     "aws/eks",
 ]
