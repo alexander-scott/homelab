@@ -184,7 +184,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "pulumi", specifier = ">=3.257.0,<4.0.0" },
-    { name = "pulumi-aws", specifier = ">=7.40.0,<8.0.0" },
+    { name = "pulumi-aws", specifier = ">=7.42.0,<8.0.0" },
     { name = "pulumi-command", specifier = ">=1.1.3" },
 ]
 
@@ -203,7 +203,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "pulumi", specifier = ">=3.257.0,<4.0.0" },
-    { name = "pulumi-aws", specifier = ">=7.40.0,<8.0.0" },
+    { name = "pulumi-aws", specifier = ">=7.42.0,<8.0.0" },
     { name = "pulumi-command", specifier = ">=1.1.3" },
     { name = "pulumi-eks", specifier = ">=4.3.0" },
     { name = "pulumi-kubernetes", specifier = ">=4.33.0" },
@@ -485,16 +485,16 @@ wheels = [
 
 [[package]]
 name = "pulumi-aws"
-version = "7.40.0"
+version = "7.42.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "parver" },
     { name = "pulumi" },
     { name = "semver" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/53/db/3caadea6e46a3994763bd15f568770a1fb40ba2ac46d49b660ac225a562d/pulumi_aws-7.40.0.tar.gz", hash = "sha256:b1261505032cd1c3682de3836246cc48ab094cccb3983d1e26c657594ce1ce7c", size = 9326793, upload-time = "2026-07-30T22:34:29.897Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/85/30/c707aca19ca130f6a2a3034abd012ca37e5ac579dcb372ecc54647722acb/pulumi_aws-7.42.0.tar.gz", hash = "sha256:e3665ceaa9e9e727170de31033add2611feeb14cbd4a7c0838a1e90f530b5c43", size = 9452594, upload-time = "2026-08-13T20:54:12.615Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/9d/1f/fd151ee04b4673b2fddb8be933bda79e7f60109e7eee6ce199dfcd2fb3f1/pulumi_aws-7.40.0-py3-none-any.whl", hash = "sha256:e9390ce7e2fe053756b133d76201252602348388c4850f63d13f20a2e57f6bf1", size = 12513600, upload-time = "2026-07-30T22:34:27.286Z" },
+    { url = "https://files.pythonhosted.org/packages/52/ac/7cf0038214bb9efd5191b0896007fcf128c09404b382c3fc185391296f7b/pulumi_aws-7.42.0-py3-none-any.whl", hash = "sha256:6dfeb257cdb03901ed6bbfa0adb9cc252f62fb7c67897796b4bb35e5cf80c6e1", size = 12638240, upload-time = "2026-08-13T20:54:09.701Z" },
 ]
 
 [[package]]
