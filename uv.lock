@@ -464,7 +464,7 @@ wheels = [
 
 [[package]]
 name = "pulumi"
-version = "3.259.0"
+version = "3.261.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "debugpy" },
@@ -478,9 +478,10 @@ dependencies = [
     { name = "protobuf" },
     { name = "pyyaml" },
     { name = "semver" },
+    { name = "typing-extensions" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f9/03/0480ecec165c0e69ec704df893f53d496cf309ef730604cc5bbd654538f2/pulumi-3.259.0-py3-none-any.whl", hash = "sha256:bdcf1f417828e2ef41040d4b90db87d1a50661b85bad4ab4935b05612c7f18e8", size = 417212, upload-time = "2026-08-19T20:05:10.63Z" },
+    { url = "https://files.pythonhosted.org/packages/cd/c5/286300468cc686995fdb2036fc653ba65ea91ba72b49a18aa2c4e5d037d2/pulumi-3.261.0-py3-none-any.whl", hash = "sha256:e4fdb5b61b97614bca2a293713f9d662909a649aa1ffbcc8465d152423005b74", size = 423327, upload-time = "2026-09-02T16:56:29.18Z" },
 ]
 
 [[package]]
