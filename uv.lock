@@ -486,16 +486,16 @@ wheels = [
 
 [[package]]
 name = "pulumi-aws"
-version = "7.53.0"
+version = "7.54.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "packaging" },
     { name = "pulumi" },
     { name = "semver" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/58/d5/da86b2e94f3164e408b2887fcd3e5e1698c35378528889bee34facfdc5fc/pulumi_aws-7.53.0.tar.gz", hash = "sha256:95cf815dda03010b496b4add8f6a68a6dfc322efea5230f0e933702eae1b2c75", size = 9866892, upload-time = "2026-11-02T18:35:28.417Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/20/4a/e0fe7cfe1867d471b6535d7672b35efe03d9fa0d004151a5b9111eabc8aa/pulumi_aws-7.54.0.tar.gz", hash = "sha256:c73098b552939c8aa71d759973c5a8c030b9d481e6a315f9f5124446a45e086a", size = 10206904, upload-time = "2026-11-06T15:26:40.777Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/16/00/2e65969ee7259aa8b4299c2879b82847bd294e3d98253e2a4b54abc119c9/pulumi_aws-7.53.0-py3-none-any.whl", hash = "sha256:32e38df1af302249e9cac940857bfe8aba2bdda6befca4381f1626a5b0c2c29b", size = 13114473, upload-time = "2026-11-02T18:35:25.636Z" },
+    { url = "https://files.pythonhosted.org/packages/7e/fa/783213c933f5ec23f96d0224b8918b9661f21942a26d78e772801b688981/pulumi_aws-7.54.0-py3-none-any.whl", hash = "sha256:a3abcdc4b48eff6a1c175d906d9e44e78283ae00c662979c3c1fc31d48f39789", size = 13444328, upload-time = "2026-11-06T15:26:37.343Z" },
 ]
 
 [[package]]
