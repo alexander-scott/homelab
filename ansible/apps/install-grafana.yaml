@@ -28,7 +28,6 @@
         name: grafana
         chart_ref: grafana/grafana
         release_namespace: "{{ k8s_namespace }}"
-        force: True
         values:
           baseURL: "{{ hostname }}"
           grafana.ini:
